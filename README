@@ -1,0 +1,45 @@
+GIT-OPEN(1)                    Extension to git                    GIT-OPEN(1)
+
+
+
+NAME
+       git-open - Open relevant git files in your favorite editor
+
+SYNOPSIS
+       git open [OPTIONS]...
+
+DESCRIPTION
+       Open staged, changed or comitted files in your git editor.
+
+       Options  can  be  combined as to open both staged, changed and comitted
+       files.
+
+OPTIONS
+       -s, --staged
+              open staged files
+
+       -c, --changed
+              open changed files
+
+       -C, --comitted
+              open files from the latest commit
+
+       -n, --dry-run
+              do not actually open any files; just show what would  have  been
+              opened
+
+       -h, --help
+              show help
+
+AUTHOR
+       Written by Andreas Louv <andraes@louv.dk>
+
+REPORTING BUGS
+       Use the GitHub bug tracker <https://github.com/andlrc/git-open/issues/>
+
+SEE ALSO
+       git(1), git-var(1)
+
+
+
+                                  03/18/2021                       GIT-OPEN(1)

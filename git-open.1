@@ -1,0 +1,34 @@
+.TH "GIT\-OPEN" "1" "03/18/2021" "" "Extension to git"
+.SH "NAME"
+git-open \- Open relevant git files in your favorite editor
+.SH "SYNOPSIS"
+.B git open
+[\fIOPTIONS\fR]...
+.SH "DESCRIPTION"
+.PP
+Open staged, changed or comitted files in your git editor.
+
+Options can be combined as to open both staged, changed and comitted files.
+.SH "OPTIONS"
+.TP
+\fB-s\fR, \fB--staged\fR
+open staged files
+.TP
+\fB-c\fR, \fB--changed\fR
+open changed files
+.TP
+\fB-C\fR, \fB--comitted\fR
+open files from the latest commit
+.TP
+\fB-n\fR, \fB--dry-run\fR
+do not actually open any files; just show what would have been opened
+.TP
+\fB-h\fR, \fB--help\fR
+show help
+.SH "AUTHOR"
+Written by Andreas Louv <andraes@louv.dk>
+.SH "REPORTING BUGS"
+Use the GitHub bug tracker <https://github.com/andlrc/git-open/issues/>
+.SH "SEE ALSO"
+.BR git (1),
+.BR git-var (1)

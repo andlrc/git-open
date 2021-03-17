@@ -1,0 +1,123 @@
+#!/bin/sh
+# Author: Andreas Louv <andreas@louv.dk>
+# Date: 18 Mar 2021
+
+OPTIONS_SPEC="\
+git open [OPTIONS]...
+
+Open relevant git files in your favorite editor
+--
+h,help      show this help and exit
+s,staged    open staged files
+c,changed   open changed files
+C,comitted  open files from the latest commit
+n,dry-run   do not actually open any files; just show what would have been opened
+"
+
+SUBDIRECTORY_OK=1
+. "$(git --exec-path)/git-sh-setup"
+
+require_work_tree
+cd_to_toplevel
+
+main()
+{
+	staged=
+	changed=
+	comitted=
+	dryrun=
+
+	while [ "$#" -gt 0 ]
+	do
+		opt=$1; shift
+		case $opt in
+			-s) staged=1;;
+			-c) changed=1;;
+			-C) comitted=1;;
+			-n) dryrun=1;;
+			--) break;;
+		esac
+	done
+
+	if [ "$#" -gt 0 ]
+	then
+		>&2 printf "error: unknown argument '%s'\n" "$1"
+		usage
+	fi
+
+	if [ -z "$staged$changed$comitted" ]
+	then
+		changed=1
+	fi
+
+	tmpfile=$(mktemp)
+
+	list "$staged" "$changed" "$comitted" | sort -u > "$tmpfile"
+
+	set --
+	while IFS= read -r file
+	do
+		set -- "$@" "$file"
+	done < "$tmpfile"
+
+	rm "$tmpfile"
+
+	if [ "$#" = 0 ]
+	then
+		die "fatal: No files to open?"
+	fi
+
+	if [ -n "$dryrun" ]
+	then
+		for file
+		do
+			echo "$file"
+		done
+		exit 0
+	fi
+
+	git_editor "$@"
+}
+
+list()
+{
+	staged=$1; shift
+	changed=$1; shift
+	comitted=$1; shift
+
+	if [ -n "$staged" ]
+	then
+		list_staged_files
+	fi
+	if [ -n "$changed" ]
+	then
+		list_changed_files
+	fi
+
+	if [ -n "$comitted" ]
+	then
+		list_comitted_files
+	fi
+
+}
+
+list_staged_files()
+{
+	git status -uno --porcelain |
+	sed 's/\(.\)\(.\) /\1:\2:/' |
+	awk -F: '$1 !~ /^ *$/ { print $3 }'
+}
+
+list_changed_files()
+{
+	git status -uno --porcelain |
+	sed 's/\(.\)\(.\) /\1:\2:/' |
+	awk -F: '$2 !~ /^ *$/ { print $3 }'
+}
+
+list_comitted_files()
+{
+	git log -1 --name-only --diff-filter=d | awk 'NR == 3' RS=
+}
+
+main "$@"
