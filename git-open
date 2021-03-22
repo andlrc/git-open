@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Andreas Louv <andreas@louv.dk>
-# Date: 18 Mar 2021
+# Date: 22 Mar 2021
 
 OPTIONS_SPEC="\
 git open [OPTIONS]...
@@ -76,7 +76,23 @@ main()
 		exit 0
 	fi
 
-	git_editor "$@"
+	git_open_editor "$@"
+}
+
+git_open_editor()
+{
+	if [ -z "${GIT_OPEN_EDITOR}" ]
+	then
+		GIT_OPEN_EDITOR="$(git config --get open.editor)"
+	fi
+
+	if [ -z "${GIT_OPEN_EDITOR}" ]
+	then
+		git_editor "$@"
+		return $?
+	fi
+
+	eval "$GIT_OPEN_EDITOR" '"$@"'
 }
 
 list()

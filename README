@@ -31,6 +31,14 @@ OPTIONS
        -h, --help
               show help
 
+VARIABLES
+       GIT_OPEN_EDITOR
+           Text  editor for opening the files. The value is meant to be inter-
+           preted by the shell when it is used.
+           The order of preference is the $GIT_OPEN_EDITOR  environment  vari-
+           able,  then  open.editor  configuration,  then  the rules from git-
+           var(1) applies
+
 AUTHOR
        Written by Andreas Louv <andraes@louv.dk>
 
@@ -42,4 +50,4 @@ SEE ALSO
 
 
 
-                                  03/18/2021                       GIT-OPEN(1)
+                                  03/22/2021                       GIT-OPEN(1)

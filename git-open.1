@@ -1,4 +1,4 @@
-.TH "GIT\-OPEN" "1" "03/18/2021" "" "Extension to git"
+.TH "GIT\-OPEN" "1" "03/22/2021" "" "Extension to git"
 .SH "NAME"
 git-open \- Open relevant git files in your favorite editor
 .SH "SYNOPSIS"
@@ -25,6 +25,16 @@ do not actually open any files; just show what would have been opened
 .TP
 \fB-h\fR, \fB--help\fR
 show help
+.SH "VARIABLES"
+.PP
+GIT_OPEN_EDITOR
+.RS 4
+Text editor for opening the files\&. The value is meant to be interpreted by the shell when it is used\&.
+.br
+The order of preference is the \fB$GIT_OPEN_EDITOR\fR environment variable, then \fBopen.editor\fR configuration, then the rules from
+.BR git-var (1)
+applies
+.RE
 .SH "AUTHOR"
 Written by Andreas Louv <andraes@louv.dk>
 .SH "REPORTING BUGS"
