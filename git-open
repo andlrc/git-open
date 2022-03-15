@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Andreas Louv <andreas@louv.dk>
-# Date: 22 Mar 2021
+# Date: 15 Mar 2022
 
 OPTIONS_SPEC="\
 git open [OPTIONS]...
@@ -18,7 +18,6 @@ SUBDIRECTORY_OK=1
 . "$(git --exec-path)/git-sh-setup"
 
 require_work_tree
-cd_to_toplevel
 
 main()
 {
@@ -52,7 +51,7 @@ main()
 
 	tmpfile=$(mktemp)
 
-	list "$staged" "$changed" "$comitted" | sort -u > "$tmpfile"
+	list_files "$staged" "$changed" "$comitted" | sort -u | prefix_git_root | relative_file > "$tmpfile"
 
 	set --
 	while IFS= read -r file
@@ -95,7 +94,49 @@ git_open_editor()
 	eval "$GIT_OPEN_EDITOR" '"$@"'
 }
 
-list()
+prefix_git_root()
+{
+	root=$(git rev-parse --show-toplevel)
+	while IFS= read -r file
+	do
+		echo "$root/$file"
+	done
+}
+
+relative_file()
+{
+	cwd=$PWD
+	[ -z "$cwd" ] && cwd=$(pwd)
+	awk -v cwd="$cwd" '
+		{
+			file = $0
+			gsub("//+", "/", cwd)
+			gsub("//+", "/", file)
+			cwd_len = split(cwd, cwd_arr, "/")
+			file_len = split(file, file_arr, "/")
+
+			for (i = 1; i <= cwd_len && i <= file_len; i++) {
+				if (cwd_arr[i] != file_arr[i]) {
+					break
+				}
+			}
+			output = ""
+			for (y = i; y <= cwd_len; y++) {
+				output = output "../"
+			}
+			for (y = i; y <= file_len; y++) {
+				if (y > i) {
+					output = output "/"
+				}
+				output = output file_arr[y]
+			}
+			print output
+		}
+	' -
+}
+
+
+list_files()
 {
 	staged=$1; shift
 	changed=$1; shift
