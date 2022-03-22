@@ -1,17 +1,17 @@
 #!/bin/sh
 # Author: Andreas Louv <andreas@louv.dk>
-# Date: 15 Mar 2022
+# Date: 22 Mar 2022
 
 OPTIONS_SPEC="\
 git open [OPTIONS]...
 
 Open relevant git files in your favorite editor
 --
-h,help      show this help and exit
-s,staged    open staged files
-c,changed   open changed files
-C,comitted  open files from the latest commit
-n,dry-run   do not actually open any files; just show what would have been opened
+h,help       show this help and exit
+s,staged     open staged files
+c,changed    open changed files
+C,committed  open files from the latest commit
+n,dry-run    do not actually open any files; just show what would have been opened
 "
 
 SUBDIRECTORY_OK=1
@@ -23,7 +23,7 @@ main()
 {
 	staged=
 	changed=
-	comitted=
+	committed=
 	dryrun=
 
 	while [ "$#" -gt 0 ]
@@ -32,7 +32,7 @@ main()
 		case $opt in
 			-s) staged=1;;
 			-c) changed=1;;
-			-C) comitted=1;;
+			-C) committed=1;;
 			-n) dryrun=1;;
 			--) break;;
 		esac
@@ -44,14 +44,14 @@ main()
 		usage
 	fi
 
-	if [ -z "$staged$changed$comitted" ]
+	if [ -z "$staged$changed$committed" ]
 	then
 		changed=1
 	fi
 
 	tmpfile=$(mktemp)
 
-	list_files "$staged" "$changed" "$comitted" | sort -u | prefix_git_root | relative_file > "$tmpfile"
+	list_files "$staged" "$changed" "$committed" | sort -u | prefix_git_root | relative_file > "$tmpfile"
 
 	set --
 	while IFS= read -r file
@@ -140,7 +140,7 @@ list_files()
 {
 	staged=$1; shift
 	changed=$1; shift
-	comitted=$1; shift
+	committed=$1; shift
 
 	if [ -n "$staged" ]
 	then
@@ -151,9 +151,9 @@ list_files()
 		list_changed_files
 	fi
 
-	if [ -n "$comitted" ]
+	if [ -n "$committed" ]
 	then
-		list_comitted_files
+		list_committed_files
 	fi
 
 }
@@ -172,7 +172,7 @@ list_changed_files()
 	awk -F: '$2 !~ /^ *$/ { print $3 }'
 }
 
-list_comitted_files()
+list_committed_files()
 {
 	git log -1 --name-only --diff-filter=d | awk 'NR == 3' RS=
 }

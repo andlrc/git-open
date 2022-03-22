@@ -1,4 +1,4 @@
-GIT-OPEN(1)                    Extension to git                    GIT-OPEN(1)
+GIT-OPEN(1)                     Extension to git                     GIT-OPEN(1)
 
 
 
@@ -9,9 +9,9 @@ SYNOPSIS
        git open [OPTIONS]...
 
 DESCRIPTION
-       Open staged, changed or comitted files in your git editor.
+       Open staged, changed or committed files in your git editor.
 
-       Options  can  be  combined as to open both staged, changed and comitted
+       Options can be combined as to open both staged, changed and committed
        files.
 
 OPTIONS
@@ -21,11 +21,11 @@ OPTIONS
        -c, --changed
               open changed files
 
-       -C, --comitted
+       -C, --committed
               open files from the latest commit
 
        -n, --dry-run
-              do not actually open any files; just show what would  have  been
+              do not actually open any files; just show what would have been
               opened
 
        -h, --help
@@ -33,11 +33,11 @@ OPTIONS
 
 VARIABLES
        GIT_OPEN_EDITOR
-           Text  editor for opening the files. The value is meant to be inter-
-           preted by the shell when it is used.
-           The order of preference is the $GIT_OPEN_EDITOR  environment  vari-
-           able,  then  open.editor  configuration,  then  the rules from git-
-           var(1) applies
+           Text editor for opening the files. The value is meant to be
+           interpreted by the shell when it is used.
+           The order of preference is the $GIT_OPEN_EDITOR environment variable,
+           then open.editor configuration, then the rules from git-var(1)
+           applies
 
 AUTHOR
        Written by Andreas Louv <andraes@louv.dk>
@@ -50,4 +50,4 @@ SEE ALSO
 
 
 
-                                  03/22/2021                       GIT-OPEN(1)
+                                   03/22/2022                        GIT-OPEN(1)
